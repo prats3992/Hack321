@@ -27,11 +27,12 @@ def find_and_sort_matches_for_user(user_name):
     all_users_ref = ref.order_by_key().get()
     for user_id, user_info in all_users_ref.items():
         if user_id != user_name:
-            match_count = sum(1 for q1, q2 in zip(user_info.values(), user_data.values()) if q1 == q2)
-            if match_count > 4:
-                matches_with_count.append((user_id, match_count))
+            # Calculate the score based on matching Q1-Q4 of user 1 with Q5-Q8 of user 2 and vice versa
+            score = sum(1 for q1, q2 in zip(list(user_data.values())[:4], list(user_info.values())[4:]) if q1 == q2)
+            score += sum(1 for q1, q2 in zip(list(user_data.values())[4:], list(user_info.values())[:4]) if q1 == q2)
+            matches_with_count.append((user_id, score))
 
-    # Sort matches by match count in descending order
+    # Sort matches by score in descending order
     sorted_matches = sorted(matches_with_count, key=lambda x: x[1], reverse=True)
     
     return sorted_matches
@@ -39,6 +40,6 @@ def find_and_sort_matches_for_user(user_name):
 # Example usage
 user_name = "Person 10"
 sorted_matches = find_and_sort_matches_for_user(user_name)
-print(f"Matches for {user_name} with more than 4 matches:")
-for match, num_matches in sorted_matches:
-    print(f"{match}: {num_matches} matches")
+print(f"Matches for {user_name}:")
+for match, score in sorted_matches:
+    print(f"{match}: Score - {score}")
