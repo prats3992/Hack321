@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Initialize Firebase
-cred_obj = credentials.Certificate('hackplaksha-aaf62-firebase-adminsdk-nitbh-e2d5cd81e5.json')
+cred_obj = credentials.Certificate('key.json')
 default_app = firebase_admin.initialize_app(cred_obj, {
     'databaseURL': "https://hackplaksha-aaf62-default-rtdb.asia-southeast1.firebasedatabase.app/"
 })
